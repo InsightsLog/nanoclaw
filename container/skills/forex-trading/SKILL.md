@@ -104,7 +104,7 @@ When analyzing a currency pair, focus entirely on fundamental drivers:
 
 ### 5. Macro Sentiment Brief (Daily)
 
-Generate a daily macro sentiment briefing that distils macroeconomic data into a structured, actionable snapshot. Produce this as a scheduled daily task or on-demand. Always save the output to `sentiment/daily/YYYY-MM-DD.md` in the workspace.
+Generate a daily macro sentiment briefing that distills macroeconomic data into a structured, actionable snapshot. Produce this as a scheduled daily task or on-demand. Always save the output to `sentiment/daily/YYYY-MM-DD.md` in the workspace.
 
 **Data gathering workflow:**
 1. Fetch the economic calendar for the current day/week (ForexFactory JSON feed or agent-browser)
@@ -135,7 +135,7 @@ _Generated:_ {ISO timestamp}
 
 **Scoring guidelines:**
 - *Impact Score (1-10):* 1-3 = low-vol session, no tier-1 data; 4-6 = moderate, some data but no surprises; 7-8 = high-impact release or central bank speech; 9-10 = rate decision, NFP, CPI, or major geopolitical shock
-- *Sentiment Score (-5 to +5):* Negative = USD bearish / risk-on favours non-USD; Positive = USD bullish / risk-off or strong US data; 0 = neutral/mixed
+- *Sentiment Score (-5 to +5):* Negative = USD bearish / risk-on favors non-USD; Positive = USD bullish / risk-off or strong US data; 0 = neutral/mixed
 - *Regime:* Risk-On = equities up, yields stable/falling, VIX low, commodity currencies strong; Risk-Off = equities down, safe havens (JPY/CHF/USD) bid, VIX elevated; Mixed = conflicting signals
 
 **WhatsApp output format:**
@@ -254,12 +254,13 @@ Store trades in the workspace for persistent tracking:
 - Pair: EUR/USD
 - Direction: Short
 - Entry: 1.0850
-- Stop Loss: 1.0900 (50 pips)
-- Take Profit: 1.0750 (100 pips)
-- Risk:Reward: 1:2
+- Stop Loss: 1.0920 (70 pips)
+- Take Profit: 1.0700 (150 pips)
+- Risk:Reward: 1:2.1
 - Lot Size: 0.5
-- Risk Amount: $250
-- Fundamental Rationale: Fed hawkish hold + NFP beat → USD strength; ECB dovish tilt + weak PMI → EUR weakness; rate divergence widening
+- Risk Amount: $350
+- Fundamental Rationale: Fed hawkish hold at 4.50% + NFP beat (312K vs 185K est) → USD strength; ECB dovish tilt with June cut priced in + Eurozone PMI contraction at 48.1 → EUR weakness; widening rate divergence (75bp) favors sustained EUR/USD downside
+- Macro Catalyst: FOMC statement (hawkish hold) + NFP blowout
 - Status: Open
 - Result: Pending
 ```
