@@ -3,110 +3,159 @@
 </p>
 
 <p align="center">
-  My personal Claude assistant that runs securely in containers. Lightweight and built to be understood and customized for your own needs.
+  A lightweight AI-powered forex macro-fundamental trading assistant that runs securely in containers with WhatsApp connectivity. Built on Anthropic's Claude Agent SDK.
 </p>
 
 <p align="center">
   <a href="https://discord.gg/VGWXrf8x"><img src="https://img.shields.io/discord/1470188214710046894?label=Discord&logo=discord&v=2" alt="Discord"></a>
 </p>
 
-**New:** First AI assistant to support [Agent Swarms](https://code.claude.com/docs/en/agent-teams). Spin up teams of agents that collaborate in your chat.
+## What This Is
 
-## Why I Built This
+A personal forex macro-fundamental trading assistant built on [NanoClaw](https://github.com/gavrielc/nanoclaw) — a lightweight AI agent that runs Claude in isolated containers with WhatsApp as the I/O channel. This fork transforms it into a specialized tool for fundamentals-driven forex traders, adding macroeconomic analysis, sentiment briefings, event-release signals, central bank tracking, and automated macro monitoring. No technical analysis — strictly fundamentals.
 
-[OpenClaw](https://github.com/openclaw/openclaw) is an impressive project with a great vision. But I can't sleep well running software I don't understand with access to my life. OpenClaw has 52+ modules, 8 config management files, 45+ dependencies, and abstractions for 15 channel providers. Security is application-level (allowlists, pairing codes) rather than OS isolation. Everything runs in one Node process with shared memory.
+## Features
 
-NanoClaw gives you the same core functionality in a codebase you can understand in 8 minutes. One process. A handful of files. Agents run in actual Linux containers with filesystem isolation, not behind permission checks.
+- **Macro Sentiment Briefs** — Daily structured briefings with impact score, risk-on/off regime, sentiment score, key drivers, and actionable pair bias
+- **Event-Release Signals** — Instant sentiment alerts at release-time with actual vs. forecast, market reaction, regime shift detection, and fundamental trade rationale
+- **Central Bank Tracking** — Monitor monetary policy across Fed, ECB, BoE, BoJ, RBA, BoC, RBNZ, SNB with rate differential analysis
+- **Economic Calendar** — Monitor high-impact events from ForexFactory and other sources
+- **Macro-Fundamental Analysis** — Rate differentials, GDP, CPI, employment, PMI, trade balance — no technicals
+- **Live Forex Prices** — Fetch real-time exchange rates using free public APIs (no API key required)
+- **Trade Journaling** — Persistent trade logs with entry/exit, fundamental rationale, and P&L tracking
+- **Position Management** — Track open positions, watchlists, and portfolio exposure
+- **Risk Calculations** — Position sizing, risk/reward ratios, pip value calculations
+- **Automated Alerts** — Schedule macro monitoring, sentiment briefs, and event alerts via WhatsApp
+- **Web Research** — Search for macro news, central bank commentary, and economic data
+- **AI-Powered Analysis** — Claude provides intelligent macroeconomic interpretation and trading insights
+- **Container Isolation** — All processing runs in sandboxed Linux containers for security
+- **Agent Swarms** — Spin up teams of specialized agents (e.g., one per central bank)
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/gavrielc/nanoclaw.git
+git clone https://github.com/InsightsLog/nanoclaw.git
 cd nanoclaw
 claude
 ```
 
 Then run `/setup`. Claude Code handles everything: dependencies, authentication, container setup, service configuration.
 
-## Philosophy
-
-**Small enough to understand.** One process, a few source files. No microservices, no message queues, no abstraction layers. Have Claude Code walk you through it.
-
-**Secure by isolation.** Agents run in Linux containers (Apple Container on macOS, or Docker). They can only see what's explicitly mounted. Bash access is safe because commands run inside the container, not on your host.
-
-**Built for one user.** This isn't a framework. It's working software that fits my exact needs. You fork it and have Claude Code make it match your exact needs.
-
-**Customization = code changes.** No configuration sprawl. Want different behavior? Modify the code. The codebase is small enough that this is safe.
-
-**AI-native.** No installation wizard; Claude Code guides setup. No monitoring dashboard; ask Claude what's happening. No debugging tools; describe the problem, Claude fixes it.
-
-**Skills over features.** Contributors shouldn't add features (e.g. support for Telegram) to the codebase. Instead, they contribute [claude code skills](https://code.claude.com/docs/en/skills) like `/add-telegram` that transform your fork. You end up with clean code that does exactly what you need.
-
-**Best harness, best model.** This runs on Claude Agent SDK, which means you're running Claude Code directly. The harness matters. A bad harness makes even smart models seem dumb, a good harness gives them superpowers. Claude Code is (IMO) the best harness available.
-
-## What It Supports
-
-- **WhatsApp I/O** - Message Claude from your phone
-- **Isolated group context** - Each group has its own `CLAUDE.md` memory, isolated filesystem, and runs in its own container sandbox with only that filesystem mounted
-- **Main channel** - Your private channel (self-chat) for admin control; every other group is completely isolated
-- **Scheduled tasks** - Recurring jobs that run Claude and can message you back
-- **Web access** - Search and fetch content
-- **Container isolation** - Agents sandboxed in Apple Container (macOS) or Docker (macOS/Linux)
-- **Agent Swarms** - Spin up teams of specialized agents that collaborate on complex tasks (first personal AI assistant to support this)
-- **Optional integrations** - Add Gmail (`/add-gmail`) and more via skills
-
 ## Usage
 
-Talk to your assistant with the trigger word (default: `@Andy`):
+Talk to your trading assistant with the trigger word (default: `@Andy`):
+
+### Macro-Fundamental Analysis
+```
+@Andy what's driving EUR/USD right now — what are the macro fundamentals?
+@Andy compare the Fed vs ECB rate path — who cuts first?
+@Andy what high-impact events are on the economic calendar this week?
+@Andy give me a fundamental breakdown of USD/JPY — rate differentials, BoJ policy, inflation
+@Andy what's the current risk regime — risk-on or risk-off?
+```
+
+### Trade Management
+```
+@Andy I went long EUR/USD at 1.0850 with SL at 1.0800 and TP at 1.0950, 0.5 lots
+@Andy update my EUR/USD trade — I moved my stop to breakeven
+@Andy close my GBP/JPY trade at 192.50 for +120 pips profit
+@Andy show my open positions
+@Andy what's my P&L for this week?
+```
+
+### Risk & Position Sizing
+```
+@Andy my account is $10,000 — how many lots can I trade EUR/USD with 2% risk and a 50 pip stop?
+@Andy what's my total exposure right now?
+@Andy calculate risk/reward for a GBP/USD short at 1.2700 with SL 1.2750 and TP 1.2600
+```
+
+### Watchlists & Alerts
+```
+@Andy add AUD/USD to my watchlist — watching for RBA rate decision on the 18th
+@Andy show my watchlist
+@Andy alert me 30 minutes before any high-impact USD events this week
+@Andy send me a daily macro sentiment brief at 7am
+```
+
+### Macro Sentiment & Event Signals
+```
+@Andy give me today's macro sentiment brief
+@Andy what's the current risk regime — risk-on or risk-off?
+@Andy US CPI just dropped — give me a sentiment alert with the numbers
+@Andy generate a sentiment alert for the latest NFP release
+@Andy show me this week's sentiment trend
+```
+
+### Scheduled Tasks
+```
+@Andy every weekday at 7am, generate and send me a Macro Sentiment Brief
+@Andy at 13:30 UTC on the first Friday of each month, send a Sentiment Alert for US NFP
+@Andy every Sunday at 8pm, summarize my weekly trading performance and sentiment trend
+@Andy alert me 30 minutes before any high-impact USD events this week
+@Andy every Friday at 6pm, send me a weekly sentiment summary
+@Andy monitor for high-impact USD events today and send me a Sentiment Alert for each one
+```
+
+## Architecture
 
 ```
-@Andy send an overview of the sales pipeline every weekday morning at 9am (has access to my Obsidian vault folder)
-@Andy review the git history for the past week each Friday and update the README if there's drift
-@Andy every Monday at 8am, compile news on AI developments from Hacker News and TechCrunch and message me a briefing
+WhatsApp (baileys) --> SQLite --> Polling loop --> Container (Claude Agent SDK + Forex Skills) --> Response
 ```
 
-From the main channel (your self-chat), you can manage groups and tasks:
-```
-@Andy list all scheduled tasks across groups
-@Andy pause the Monday briefing task
-@Andy join the Family Chat group
-```
+Single Node.js process. Claude agents execute in isolated Linux containers with forex macro-fundamental skills loaded automatically. The agent uses free public APIs and web browsing to fetch economic data, central bank statements, and market rates. Sentiment briefs and trade data persist in the group workspace between sessions.
+
+### Key Files
+- `src/index.ts` — Main app: WhatsApp connection, message loop, IPC
+- `src/container-runner.ts` — Spawns streaming agent containers
+- `src/task-scheduler.ts` — Runs scheduled market monitoring tasks
+- `src/db.ts` — SQLite operations (messages, groups, sessions, state)
+- `container/skills/forex-trading/SKILL.md` — Forex macro-fundamental capabilities (sentiment briefs, event signals, central bank tracking, economic calendar)
+- `container/skills/agent-browser/SKILL.md` — Browser automation for economic data sites
+- `groups/main/CLAUDE.md` — Main channel agent memory and configuration
+- `groups/global/CLAUDE.md` — Shared agent context across all groups
+
+### Data Sources (No API Keys Required)
+- **Exchange Rates**: [ExchangeRate-API](https://open.er-api.com/), [Frankfurter](https://api.frankfurter.app/), [FloatRates](https://www.floatrates.com/)
+- **Economic Calendar**: [ForexFactory](https://www.forexfactory.com/) (via agent-browser), Forex Factory JSON feed
+- **Central Banks**: Fed, ECB, BoE, BoJ websites (via agent-browser and web search)
+- **Macro News & Data**: Web search via built-in WebSearch tool, Investing.com
+
+### Persistent Data
+| Data | Location | Purpose |
+|------|----------|---------|
+| Sentiment Briefs | `groups/main/sentiment/daily/` | Daily macro sentiment briefings |
+| Sentiment Alerts | `groups/main/sentiment/alerts/` | Event-release signal snapshots |
+| Sentiment Summary | `groups/main/sentiment/summary.md` | Rolling regime and score tracker |
+| Trade Journal | `groups/main/trades/` | Individual trade entries with fundamental rationale |
+| Portfolio | `groups/main/portfolio.md` | Active positions and P&L |
+| Watchlist | `groups/main/watchlist.md` | Monitored pairs with macro catalysts |
+| Preferences | `groups/main/preferences.md` | Trading style, risk tolerance, timezone |
+| Conversations | `groups/main/conversations/` | Searchable chat history |
 
 ## Customizing
 
 There are no configuration files to learn. Just tell Claude Code what you want:
 
-- "Change the trigger word to @Bob"
-- "Remember in the future to make responses shorter and more direct"
-- "Add a custom greeting when I say good morning"
-- "Store conversation summaries weekly"
+- "Change the trigger word to @Trader"
+- "I trade macro fundamentals only — focus on rate differentials and central bank policy"
+- "My account is $25,000 with 1:100 leverage at IC Markets"
+- "I only trade EUR/USD, GBP/USD, and USD/JPY — update my watchlist"
+- "Add a pre-market routine that checks overnight macro releases and central bank headlines"
 
 Or run `/customize` for guided changes.
 
-The codebase is small enough that Claude can safely modify it.
+## Philosophy
 
-## Contributing
+This project inherits NanoClaw's core philosophy:
 
-**Don't add features. Add skills.**
+**Small enough to understand.** One process, a few source files. No microservices, no abstraction layers.
 
-If you want to add Telegram support, don't create a PR that adds Telegram alongside WhatsApp. Instead, contribute a skill file (`.claude/skills/add-telegram/SKILL.md`) that teaches Claude Code how to transform a NanoClaw installation to use Telegram.
+**Secure by isolation.** Agents run in Linux containers. They can only see what's explicitly mounted.
 
-Users then run `/add-telegram` on their fork and get clean code that does exactly what they need, not a bloated system trying to support every use case.
+**Built for one user.** This is working software for a forex trader's specific needs. Fork it and customize.
 
-### RFS (Request for Skills)
-
-Skills we'd love to see:
-
-**Communication Channels**
-- `/add-telegram` - Add Telegram as channel. Should give the user option to replace WhatsApp or add as additional channel. Also should be possible to add it as a control channel (where it can trigger actions) or just a channel that can be used in actions triggered elsewhere
-- `/add-slack` - Add Slack
-- `/add-discord` - Add Discord
-
-**Platform Support**
-- `/setup-windows` - Windows via WSL2 + Docker
-
-**Session Management**
-- `/add-clear` - Add a `/clear` command that compacts the conversation (summarizes context while preserving critical information in the same session). Requires figuring out how to trigger compaction programmatically via the Claude Agent SDK.
+**AI-native.** No dashboards or configuration GUIs. Talk to Claude to configure, debug, and customize.
 
 ## Requirements
 
@@ -115,59 +164,9 @@ Skills we'd love to see:
 - [Claude Code](https://claude.ai/download)
 - [Apple Container](https://github.com/apple/container) (macOS) or [Docker](https://docker.com/products/docker-desktop) (macOS/Linux)
 
-## Architecture
+## Risk Disclaimer
 
-```
-WhatsApp (baileys) --> SQLite --> Polling loop --> Container (Claude Agent SDK) --> Response
-```
-
-Single Node.js process. Agents execute in isolated Linux containers with mounted directories. Per-group message queue with concurrency control. IPC via filesystem.
-
-Key files:
-- `src/index.ts` - Main app: WhatsApp connection, message loop, IPC
-- `src/group-queue.ts` - Per-group queue with global concurrency limit
-- `src/container-runner.ts` - Spawns streaming agent containers
-- `src/task-scheduler.ts` - Runs scheduled tasks
-- `src/db.ts` - SQLite operations (messages, groups, sessions, state)
-- `groups/*/CLAUDE.md` - Per-group memory
-
-## FAQ
-
-**Why WhatsApp and not Telegram/Signal/etc?**
-
-Because I use WhatsApp. Fork it and run a skill to change it. That's the whole point.
-
-**Why Apple Container instead of Docker?**
-
-On macOS, Apple Container is lightweight, fast, and optimized for Apple silicon. But Docker is also fully supported—during `/setup`, you can choose which runtime to use. On Linux, Docker is used automatically.
-
-**Can I run this on Linux?**
-
-Yes. Run `/setup` and it will automatically configure Docker as the container runtime. Thanks to [@dotsetgreg](https://github.com/dotsetgreg) for contributing the `/convert-to-docker` skill.
-
-**Is this secure?**
-
-Agents run in containers, not behind application-level permission checks. They can only access explicitly mounted directories. You should still review what you're running, but the codebase is small enough that you actually can. See [docs/SECURITY.md](docs/SECURITY.md) for the full security model.
-
-**Why no configuration files?**
-
-We don't want configuration sprawl. Every user should customize it to so that the code matches exactly what they want rather than configuring a generic system. If you like having config files, tell Claude to add them.
-
-**How do I debug issues?**
-
-Ask Claude Code. "Why isn't the scheduler running?" "What's in the recent logs?" "Why did this message not get a response?" That's the AI-native approach.
-
-**Why isn't the setup working for me?**
-
-I don't know. Run `claude`, then run `/debug`. If claude finds an issue that is likely affecting other users, open a PR to modify the setup SKILL.md.
-
-**What changes will be accepted into the codebase?**
-
-Security fixes, bug fixes, and clear improvements to the base configuration. That's it.
-
-Everything else (new capabilities, OS compatibility, hardware support, enhancements) should be contributed as skills.
-
-This keeps the base system minimal and lets every user customize their installation without inheriting features they don't want.
+This tool provides trading analysis assistance only. It does not constitute financial advice. Forex trading involves substantial risk of loss and is not suitable for all investors. Past performance does not guarantee future results. Always do your own research and consider your financial situation before trading.
 
 ## Community
 

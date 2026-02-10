@@ -1,7 +1,7 @@
 {
   "name": "nanoclaw",
   "version": "1.0.0",
-  "description": "Personal Claude assistant. Lightweight, secure, customizable.",
+  "description": "AI-powered forex trading assistant. Market analysis, trade alerts, and position management via WhatsApp.",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
