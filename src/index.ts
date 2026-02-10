@@ -12,6 +12,7 @@ import { CronExpressionParser } from 'cron-parser';
 
 import {
   ASSISTANT_NAME,
+  DASHBOARD_ENABLED,
   DATA_DIR,
   IDLE_TIMEOUT,
   IPC_POLL_INTERVAL,
@@ -21,6 +22,7 @@ import {
   TIMEZONE,
   TRIGGER_PATTERN,
 } from './config.js';
+import { startDashboard } from './dashboard.js';
 import {
   AvailableGroup,
   ContainerOutput,
@@ -117,10 +119,7 @@ function loadState(): void {
 
 function saveState(): void {
   setRouterState('last_timestamp', lastTimestamp);
-  setRouterState(
-    'last_agent_timestamp',
-    JSON.stringify(lastAgentTimestamp),
-  );
+  setRouterState('last_agent_timestamp', JSON.stringify(lastAgentTimestamp));
 }
 
 function registerGroup(jid: string, group: RegisteredGroup): void {
@@ -202,8 +201,9 @@ function escapeXml(s: string): string {
 }
 
 function formatMessages(messages: NewMessage[]): string {
-  const lines = messages.map((m) =>
-    `<message sender="${escapeXml(m.sender_name)}" time="${m.timestamp}">${escapeXml(m.content)}</message>`,
+  const lines = messages.map(
+    (m) =>
+      `<message sender="${escapeXml(m.sender_name)}" time="${m.timestamp}">${escapeXml(m.content)}</message>`,
   );
   return `<messages>\n${lines.join('\n')}\n</messages>`;
 }
@@ -260,7 +260,10 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
   const resetIdleTimer = () => {
     if (idleTimer) clearTimeout(idleTimer);
     idleTimer = setTimeout(() => {
-      logger.debug({ group: group.name }, 'Idle timeout, closing container stdin');
+      logger.debug(
+        { group: group.name },
+        'Idle timeout, closing container stdin',
+      );
       queue.closeStdin(chatJid);
     }, IDLE_TIMEOUT);
   };
@@ -271,7 +274,10 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
   const output = await runAgent(group, prompt, chatJid, async (result) => {
     // Streaming output callback — called for each agent result
     if (result.result) {
-      const raw = typeof result.result === 'string' ? result.result : JSON.stringify(result.result);
+      const raw =
+        typeof result.result === 'string'
+          ? result.result
+          : JSON.stringify(result.result);
       // Strip <internal>...</internal> blocks — agent uses these for internal reasoning
       const text = raw.replace(/<internal>[\s\S]*?<\/internal>/g, '').trim();
       logger.info({ group: group.name }, `Agent output: ${raw.slice(0, 200)}`);
@@ -294,7 +300,10 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
     // Roll back cursor so retries can re-process these messages
     lastAgentTimestamp[chatJid] = previousCursor;
     saveState();
-    logger.warn({ group: group.name }, 'Agent error, rolled back message cursor for retry');
+    logger.warn(
+      { group: group.name },
+      'Agent error, rolled back message cursor for retry',
+    );
     return false;
   }
 
@@ -356,7 +365,8 @@ async function runAgent(
         chatJid,
         isMain,
       },
-      (proc, containerName) => queue.registerProcess(chatJid, proc, containerName, group.folder),
+      (proc, containerName) =>
+        queue.registerProcess(chatJid, proc, containerName, group.folder),
       wrappedOnOutput,
     );
 
@@ -383,7 +393,10 @@ async function runAgent(
 async function sendMessage(jid: string, text: string): Promise<void> {
   if (!waConnected) {
     outgoingQueue.push({ jid, text });
-    logger.info({ jid, length: text.length, queueSize: outgoingQueue.length }, 'WA disconnected, message queued');
+    logger.info(
+      { jid, length: text.length, queueSize: outgoingQueue.length },
+      'WA disconnected, message queued',
+    );
     return;
   }
   try {
@@ -392,7 +405,10 @@ async function sendMessage(jid: string, text: string): Promise<void> {
   } catch (err) {
     // If send fails, queue it for retry on reconnect
     outgoingQueue.push({ jid, text });
-    logger.warn({ jid, err, queueSize: outgoingQueue.length }, 'Failed to send, message queued');
+    logger.warn(
+      { jid, err, queueSize: outgoingQueue.length },
+      'Failed to send, message queued',
+    );
   }
 }
 
@@ -401,7 +417,10 @@ async function flushOutgoingQueue(): Promise<void> {
   if (flushing || outgoingQueue.length === 0) return;
   flushing = true;
   try {
-    logger.info({ count: outgoingQueue.length }, 'Flushing outgoing message queue');
+    logger.info(
+      { count: outgoingQueue.length },
+      'Flushing outgoing message queue',
+    );
     // Process one at a time — sendMessage re-queues on failure internally.
     // Shift instead of splice so unattempted messages stay in the queue
     // if an unexpected error occurs.
@@ -791,7 +810,10 @@ async function connectWhatsApp(): Promise<void> {
       waConnected = false;
       const reason = (lastDisconnect?.error as any)?.output?.statusCode;
       const shouldReconnect = reason !== DisconnectReason.loggedOut;
-      logger.info({ reason, shouldReconnect, queuedMessages: outgoingQueue.length }, 'Connection closed');
+      logger.info(
+        { reason, shouldReconnect, queuedMessages: outgoingQueue.length },
+        'Connection closed',
+      );
 
       if (shouldReconnect) {
         logger.info('Reconnecting...');
@@ -843,7 +865,8 @@ async function connectWhatsApp(): Promise<void> {
         registeredGroups: () => registeredGroups,
         getSessions: () => sessions,
         queue,
-        onProcess: (groupJid, proc, containerName, groupFolder) => queue.registerProcess(groupJid, proc, containerName, groupFolder),
+        onProcess: (groupJid, proc, containerName, groupFolder) =>
+          queue.registerProcess(groupJid, proc, containerName, groupFolder),
         sendMessage,
         assistantName: ASSISTANT_NAME,
       });
@@ -1033,17 +1056,26 @@ function ensureContainerSystemRunning(): void {
       stdio: ['pipe', 'pipe', 'pipe'],
       encoding: 'utf-8',
     });
-    const containers: { status: string; configuration: { id: string } }[] = JSON.parse(output || '[]');
+    const containers: { status: string; configuration: { id: string } }[] =
+      JSON.parse(output || '[]');
     const orphans = containers
-      .filter((c) => c.status === 'running' && c.configuration.id.startsWith('nanoclaw-'))
+      .filter(
+        (c) =>
+          c.status === 'running' && c.configuration.id.startsWith('nanoclaw-'),
+      )
       .map((c) => c.configuration.id);
     for (const name of orphans) {
       try {
         execSync(`container stop ${name}`, { stdio: 'pipe' });
-      } catch { /* already stopped */ }
+      } catch {
+        /* already stopped */
+      }
     }
     if (orphans.length > 0) {
-      logger.info({ count: orphans.length, names: orphans }, 'Stopped orphaned containers');
+      logger.info(
+        { count: orphans.length, names: orphans },
+        'Stopped orphaned containers',
+      );
     }
   } catch (err) {
     logger.warn({ err }, 'Failed to clean up orphaned containers');
@@ -1055,6 +1087,10 @@ async function main(): Promise<void> {
   initDatabase();
   logger.info('Database initialized');
   loadState();
+
+  if (DASHBOARD_ENABLED) {
+    startDashboard();
+  }
 
   // Graceful shutdown handlers
   const shutdown = async (signal: string) => {
