@@ -18,6 +18,8 @@ A personal forex trading assistant built on [NanoClaw](https://github.com/gavrie
 
 - **Live Forex Prices** — Fetch real-time exchange rates using free public APIs (no API key required)
 - **Technical Analysis** — Analyze charts and indicators via TradingView using the built-in browser automation
+- **Macro Sentiment Briefs** — Daily structured briefings with impact score, risk-on/off regime, sentiment score, key drivers, and actionable pair bias
+- **Event-Release Signals** — Instant sentiment alerts at release-time with actual vs. forecast, market reaction, regime shift detection, and actionable trade levels
 - **Trade Journaling** — Persistent trade logs with entry/exit, rationale, and P&L tracking
 - **Position Management** — Track open positions, watchlists, and portfolio exposure
 - **Risk Calculations** — Position sizing, risk/reward ratios, pip value calculations
@@ -75,12 +77,24 @@ Talk to your trading assistant with the trigger word (default: `@Andy`):
 @Andy send me a daily market briefing at 7am
 ```
 
+### Macro Sentiment & Event Signals
+```
+@Andy give me today's macro sentiment brief
+@Andy what's the current risk regime — risk-on or risk-off?
+@Andy US CPI just dropped — give me a sentiment alert with the numbers
+@Andy generate a sentiment alert for the latest NFP release
+@Andy show me this week's sentiment trend
+```
+
 ### Scheduled Tasks
 ```
 @Andy every weekday at 7am, send me a morning market briefing with major pair analysis
+@Andy every weekday at 7am, generate and send me a Macro Sentiment Brief
 @Andy every Sunday at 8pm, summarize my weekly trading performance
 @Andy alert me 30 minutes before any high-impact USD events this week
 @Andy every 4 hours, check if EUR/USD has broken the 1.0800 level
+@Andy at 13:30 UTC on the first Friday of each month, send a Sentiment Alert for US NFP
+@Andy every Friday at 6pm, send me a weekly sentiment summary
 ```
 
 ## Architecture
@@ -115,6 +129,9 @@ Single Node.js process. Claude agents execute in isolated Linux containers with 
 | Watchlist | `groups/main/watchlist.md` | Monitored pairs with alerts |
 | Preferences | `groups/main/preferences.md` | Trading style, risk tolerance, timezone |
 | Analysis | `groups/main/analysis/` | Saved technical analysis reports |
+| Sentiment Briefs | `groups/main/sentiment/daily/` | Daily macro sentiment briefings |
+| Sentiment Alerts | `groups/main/sentiment/alerts/` | Event-release signal snapshots |
+| Sentiment Summary | `groups/main/sentiment/summary.md` | Rolling regime and score tracker |
 | Conversations | `groups/main/conversations/` | Searchable chat history |
 
 ## Customizing
