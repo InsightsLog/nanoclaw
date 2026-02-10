@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A lightweight AI-powered forex trading assistant that runs securely in containers with WhatsApp connectivity. Built on Anthropic's Claude Agent SDK.
+  A lightweight AI-powered forex macro-fundamental trading assistant that runs securely in containers with WhatsApp connectivity. Built on Anthropic's Claude Agent SDK.
 </p>
 
 <p align="center">
@@ -12,24 +12,24 @@
 
 ## What This Is
 
-A personal forex trading assistant built on [NanoClaw](https://github.com/gavrielc/nanoclaw) — a lightweight AI agent that runs Claude in isolated containers with WhatsApp as the I/O channel. This fork transforms it into a specialized tool for forex traders, adding market analysis capabilities, trade journaling, position tracking, and automated market monitoring.
+A personal forex macro-fundamental trading assistant built on [NanoClaw](https://github.com/gavrielc/nanoclaw) — a lightweight AI agent that runs Claude in isolated containers with WhatsApp as the I/O channel. This fork transforms it into a specialized tool for fundamentals-driven forex traders, adding macroeconomic analysis, sentiment briefings, event-release signals, central bank tracking, and automated macro monitoring. No technical analysis — strictly fundamentals.
 
 ## Features
 
-- **Live Forex Prices** — Fetch real-time exchange rates using free public APIs (no API key required)
-- **Technical Analysis** — Analyze charts and indicators via TradingView using the built-in browser automation
 - **Macro Sentiment Briefs** — Daily structured briefings with impact score, risk-on/off regime, sentiment score, key drivers, and actionable pair bias
-- **Event-Release Signals** — Instant sentiment alerts at release-time with actual vs. forecast, market reaction, regime shift detection, and actionable trade levels
-- **Trade Journaling** — Persistent trade logs with entry/exit, rationale, and P&L tracking
+- **Event-Release Signals** — Instant sentiment alerts at release-time with actual vs. forecast, market reaction, regime shift detection, and fundamental trade rationale
+- **Central Bank Tracking** — Monitor monetary policy across Fed, ECB, BoE, BoJ, RBA, BoC, RBNZ, SNB with rate differential analysis
+- **Economic Calendar** — Monitor high-impact events from ForexFactory and other sources
+- **Macro-Fundamental Analysis** — Rate differentials, GDP, CPI, employment, PMI, trade balance — no technicals
+- **Live Forex Prices** — Fetch real-time exchange rates using free public APIs (no API key required)
+- **Trade Journaling** — Persistent trade logs with entry/exit, fundamental rationale, and P&L tracking
 - **Position Management** — Track open positions, watchlists, and portfolio exposure
 - **Risk Calculations** — Position sizing, risk/reward ratios, pip value calculations
-- **Economic Calendar** — Monitor high-impact events from ForexFactory and other sources
-- **Automated Alerts** — Schedule price monitoring, daily briefings, and event alerts via WhatsApp
-- **Market Briefings** — Automated daily/weekly market summaries delivered to your phone
-- **Web Research** — Search for forex news, sentiment analysis, and market commentary
-- **AI-Powered Analysis** — Claude provides intelligent market interpretation and trading insights
+- **Automated Alerts** — Schedule macro monitoring, sentiment briefs, and event alerts via WhatsApp
+- **Web Research** — Search for macro news, central bank commentary, and economic data
+- **AI-Powered Analysis** — Claude provides intelligent macroeconomic interpretation and trading insights
 - **Container Isolation** — All processing runs in sandboxed Linux containers for security
-- **Agent Swarms** — Spin up teams of specialized agents (e.g., one per currency pair)
+- **Agent Swarms** — Spin up teams of specialized agents (e.g., one per central bank)
 
 ## Quick Start
 
@@ -45,12 +45,13 @@ Then run `/setup`. Claude Code handles everything: dependencies, authentication,
 
 Talk to your trading assistant with the trigger word (default: `@Andy`):
 
-### Market Analysis
+### Macro-Fundamental Analysis
 ```
-@Andy what's the EUR/USD doing right now?
-@Andy give me a technical analysis of GBP/JPY on the daily timeframe
+@Andy what's driving EUR/USD right now — what are the macro fundamentals?
+@Andy compare the Fed vs ECB rate path — who cuts first?
 @Andy what high-impact events are on the economic calendar this week?
-@Andy analyze the USD/CHF chart and identify key support/resistance levels
+@Andy give me a fundamental breakdown of USD/JPY — rate differentials, BoJ policy, inflation
+@Andy what's the current risk regime — risk-on or risk-off?
 ```
 
 ### Trade Management
@@ -71,10 +72,10 @@ Talk to your trading assistant with the trigger word (default: `@Andy`):
 
 ### Watchlists & Alerts
 ```
-@Andy add AUD/USD to my watchlist — watching for a break below 0.6500
+@Andy add AUD/USD to my watchlist — watching for RBA rate decision on the 18th
 @Andy show my watchlist
-@Andy check EUR/USD every 4 hours and alert me if it breaks 1.0800
-@Andy send me a daily market briefing at 7am
+@Andy alert me 30 minutes before any high-impact USD events this week
+@Andy send me a daily macro sentiment brief at 7am
 ```
 
 ### Macro Sentiment & Event Signals
@@ -88,13 +89,12 @@ Talk to your trading assistant with the trigger word (default: `@Andy`):
 
 ### Scheduled Tasks
 ```
-@Andy every weekday at 7am, send me a morning market briefing with major pair analysis
 @Andy every weekday at 7am, generate and send me a Macro Sentiment Brief
-@Andy every Sunday at 8pm, summarize my weekly trading performance
-@Andy alert me 30 minutes before any high-impact USD events this week
-@Andy every 4 hours, check if EUR/USD has broken the 1.0800 level
 @Andy at 13:30 UTC on the first Friday of each month, send a Sentiment Alert for US NFP
+@Andy every Sunday at 8pm, summarize my weekly trading performance and sentiment trend
+@Andy alert me 30 minutes before any high-impact USD events this week
 @Andy every Friday at 6pm, send me a weekly sentiment summary
+@Andy monitor for high-impact USD events today and send me a Sentiment Alert for each one
 ```
 
 ## Architecture
@@ -103,35 +103,34 @@ Talk to your trading assistant with the trigger word (default: `@Andy`):
 WhatsApp (baileys) --> SQLite --> Polling loop --> Container (Claude Agent SDK + Forex Skills) --> Response
 ```
 
-Single Node.js process. Claude agents execute in isolated Linux containers with forex trading skills loaded automatically. The agent uses free public APIs and web browsing to fetch live market data. Trade data persists in the group workspace between sessions.
+Single Node.js process. Claude agents execute in isolated Linux containers with forex macro-fundamental skills loaded automatically. The agent uses free public APIs and web browsing to fetch economic data, central bank statements, and market rates. Sentiment briefs and trade data persist in the group workspace between sessions.
 
 ### Key Files
 - `src/index.ts` — Main app: WhatsApp connection, message loop, IPC
 - `src/container-runner.ts` — Spawns streaming agent containers
 - `src/task-scheduler.ts` — Runs scheduled market monitoring tasks
 - `src/db.ts` — SQLite operations (messages, groups, sessions, state)
-- `container/skills/forex-trading/SKILL.md` — Forex trading capabilities (market data, analysis, journaling)
-- `container/skills/agent-browser/SKILL.md` — Browser automation for charting sites
+- `container/skills/forex-trading/SKILL.md` — Forex macro-fundamental capabilities (sentiment briefs, event signals, central bank tracking, economic calendar)
+- `container/skills/agent-browser/SKILL.md` — Browser automation for economic data sites
 - `groups/main/CLAUDE.md` — Main channel agent memory and configuration
 - `groups/global/CLAUDE.md` — Shared agent context across all groups
 
 ### Data Sources (No API Keys Required)
 - **Exchange Rates**: [ExchangeRate-API](https://open.er-api.com/), [Frankfurter](https://api.frankfurter.app/), [FloatRates](https://www.floatrates.com/)
-- **Charts & Analysis**: [TradingView](https://www.tradingview.com/) (via agent-browser)
 - **Economic Calendar**: [ForexFactory](https://www.forexfactory.com/) (via agent-browser), Forex Factory JSON feed
-- **News & Sentiment**: Web search via built-in WebSearch tool
+- **Central Banks**: Fed, ECB, BoE, BoJ websites (via agent-browser and web search)
+- **Macro News & Data**: Web search via built-in WebSearch tool, Investing.com
 
 ### Persistent Data
 | Data | Location | Purpose |
 |------|----------|---------|
-| Trade Journal | `groups/main/trades/` | Individual trade entries with rationale |
-| Portfolio | `groups/main/portfolio.md` | Active positions and P&L |
-| Watchlist | `groups/main/watchlist.md` | Monitored pairs with alerts |
-| Preferences | `groups/main/preferences.md` | Trading style, risk tolerance, timezone |
-| Analysis | `groups/main/analysis/` | Saved technical analysis reports |
 | Sentiment Briefs | `groups/main/sentiment/daily/` | Daily macro sentiment briefings |
 | Sentiment Alerts | `groups/main/sentiment/alerts/` | Event-release signal snapshots |
 | Sentiment Summary | `groups/main/sentiment/summary.md` | Rolling regime and score tracker |
+| Trade Journal | `groups/main/trades/` | Individual trade entries with fundamental rationale |
+| Portfolio | `groups/main/portfolio.md` | Active positions and P&L |
+| Watchlist | `groups/main/watchlist.md` | Monitored pairs with macro catalysts |
+| Preferences | `groups/main/preferences.md` | Trading style, risk tolerance, timezone |
 | Conversations | `groups/main/conversations/` | Searchable chat history |
 
 ## Customizing
@@ -139,10 +138,10 @@ Single Node.js process. Claude agents execute in isolated Linux containers with 
 There are no configuration files to learn. Just tell Claude Code what you want:
 
 - "Change the trigger word to @Trader"
-- "I prefer scalping on the 5-minute chart — remember that"
+- "I trade macro fundamentals only — focus on rate differentials and central bank policy"
 - "My account is $25,000 with 1:100 leverage at IC Markets"
 - "I only trade EUR/USD, GBP/USD, and USD/JPY — update my watchlist"
-- "Add a pre-market routine that checks overnight moves on my pairs"
+- "Add a pre-market routine that checks overnight macro releases and central bank headlines"
 
 Or run `/customize` for guided changes.
 
