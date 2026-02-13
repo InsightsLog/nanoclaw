@@ -41,6 +41,8 @@ claude
 
 Then run `/setup`. Claude Code handles everything: dependencies, authentication, container setup, service configuration.
 
+**📚 New to using NanoClaw for forex trading?** Read the [Forex Trader's Guide](docs/FOREX_TRADER_GUIDE.md) for a comprehensive walkthrough of using NanoClaw as macroeconomic intelligence — daily briefings, event alerts, weekly outlooks, and AI-powered macro analysis.
+
 ## Usage
 
 Talk to your trading assistant with the trigger word (default: `@Andy`):
@@ -156,6 +158,15 @@ This project inherits NanoClaw's core philosophy:
 **Built for one user.** This is working software for a forex trader's specific needs. Fork it and customize.
 
 **AI-native.** No dashboards or configuration GUIs. Talk to Claude to configure, debug, and customize.
+
+## Documentation
+
+**📘 [Forex Trader's Guide](docs/FOREX_TRADER_GUIDE.md)** — Comprehensive guide on using NanoClaw as macroeconomic intelligence: automated daily briefings, weekly outlooks, event updates, AI chatbox with full context, central bank tracking, and real-world trading workflows.
+
+Other docs:
+- [Security](docs/SECURITY.md) — Container isolation and security model
+- [Requirements](docs/REQUIREMENTS.md) — Architecture decisions and design principles
+- [SDK Deep Dive](docs/SDK_DEEP_DIVE.md) — How NanoClaw uses Claude Agent SDK
 
 ## Requirements
 
